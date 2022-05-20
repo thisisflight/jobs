@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load superjobs %}
+{% block title %}
+    Профиль пользователя {{ user.username }}
+{% endblock %}
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-3 p-0">
+            <form method="post" class="mt-3 form-control">
+                {% csrf_token %}
+                <h4>Создать тег</h4>
+                <label>
+                    <input type="text" name="title" class="form-control mb-3" placeholder="Введите тег">
+                    {{ tag_form.title.errors }}
+                    <button class="btn btn-success" name="first_form">Создать тег</button>
+                </label>
+            </form>
+
+            <form method="post" class="mt-4 form-control">
+                {% csrf_token %}
+                <h4>Создать значение для тега</h4>
+                <div class="form-group">
+                    <label>
+                        <input type="text" name="title" class="form-control mb-3"
+                               placeholder="Введите значение для тега">
+                        {{ tag_value_form.title.errors }}
+                    </label>
+                </div>
+                <div class="form-group mb-3">
+                    <label>
+                        Выберите тег
+                        {{ tag_value_form.tag }}
+                        {{ tag_value_form.tag.errors }}
+                    </label>
+                </div>
+                <button class="btn btn-success" name="second_form">Создать значение</button>
+            </form>
+
+        </div>
+        <div class="col-md-6">
+            <div class="card mt-3">
+                <h4 class="card-header profile-header">Личный кабинет</h4>
+                <div class="card-body">
+                    <p class="description">Имя: {{ user.first_name }} {{ user.last_name }}</p>
+                    {% for key in user_data %}
+                        <p class="description">{{ key }}: {% processing_list_to_string user_data key %}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 p-0">
+            <div class="card mt-3 ">
+                <h4 class="card-header profile-header">Добавить теги</h4>
+                <ul class="tag-list">
+                    {% for value in values_to_add %}
+                        <li class="tag-item">
+                            {{ value.tag.title }} - {{ value.title }}
+                            <form action="{% url 'accounts:add-tag' value.pk %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn btn-success" type="submit">＋</button>
+                            </form>
+                        </li>
+                    {% empty %}
+                        <p class="empty">Тегов для добавления нет</p>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card mt-3 ">
+                <h4 class="card-header profile-header">Удалить теги</h4>
+                <ul class="tag-list">
+                    {% for value in users_tag_values %}
+                        <li class="tag-item">
+                            {{ value.tag.title }} - {{ value.title }}
+                            <form method="post" action="{% url 'accounts:delete-tag' value.pk %}">
+                                {% csrf_token %}
+                                <button class="btn btn-danger del-btn" type="submit">X</button>
+                            </form>
+                        </li>
+                    {% empty %}
+                        <p class="empty">Тегов для удаления нет</p>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% include 'partials/_styles.html' %}
+</head>
+<body>
+{% include 'partials/_header.html' %}
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+{% include 'partials/_scripts.html' %}
+</body>
+</html>

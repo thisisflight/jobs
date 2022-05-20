@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load superjobs %}
+{% block title %}
+    Главная страница
+{% endblock %}
+{% block content %}
+    <h2 class="mt-2 mb-2 main-header">Список кандидатов и их навыков</h2>
+    <div class="row">
+        {% for user in users %}
+            {% with user.username as username %}
+                <div class="col-md-6">
+                    <div class="card mt-3">
+                        <h4 class="card-header profile-header">{{ username }}</h4>
+                        <div class="card-body">
+                            <p class="description">Имя: {{ user.first_name }} {{ user.last_name }}</p>
+                            {% with users_data|processing_dict:username as user_data %}
+                                {% for key in user_data %}
+                                    <p class="description">{{ key }}: {% processing_list_to_string user_data key %}</p>
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                </div>
+            {% endwith %}
+        {% endfor %}
+    </div>
+{% endblock %}
